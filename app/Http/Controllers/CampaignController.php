@@ -43,7 +43,6 @@ class CampaignController extends Controller
     public function update(CampaignRequest $request, $id): JsonResponse
     {
         $campaign = Campaign::query()->findOrFail($id);
-
         $campaign = array_merge($campaign->toArray(), $request->validated());
 
         Campaign::query()->where('id', $id)->update($campaign);
@@ -59,5 +58,27 @@ class CampaignController extends Controller
         $deleted = Campaign::destroy($id);
 
         return response()->json($deleted, Response::HTTP_OK); // returning the number of deleted records
+    }
+
+    /**
+     * Retrieve all metrics for a specific campaign.
+     */
+    public function metrics(CampaignRequest $request, $campaignId): JsonResponse
+    {
+        $validated = $request->validated();
+
+        $campaign = Campaign::query()->findOrFail($campaignId);
+        $campaign = new Campaign($campaign);
+
+        $metrics = $campaign->metrics()
+            ->whereBetween('date', [$validated['start'], $validated['end']])
+            ->get();
+
+        // Return the response
+        return response()->json([
+            'campaign_id' => $campaign->id,
+            'campaign_name' => $campaign->name,
+            'metrics' => $metrics,
+        ]);
     }
 }
