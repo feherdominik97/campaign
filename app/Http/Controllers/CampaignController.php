@@ -44,7 +44,9 @@ class CampaignController extends Controller
     {
         $campaign = Campaign::query()->findOrFail($id);
 
-        array_merge($campaign->toArray(), $request->validated());
+        $campaign = array_merge($campaign->toArray(), $request->validated());
+
+        Campaign::query()->where('id', $id)->update($campaign);
 
         return response()->json($campaign, Response::HTTP_OK);
     }
@@ -54,11 +56,8 @@ class CampaignController extends Controller
      */
     public function destroy($id): JsonResponse
     {
-        Campaign::query()
-            ->findOrFail($id)
-            ->toQuery()
-            ->delete();
+        $deleted = Campaign::destroy($id);
 
-        return response()->json(null, Response::HTTP_NO_CONTENT);
+        return response()->json($deleted, Response::HTTP_OK); // returning the number of deleted records
     }
 }
