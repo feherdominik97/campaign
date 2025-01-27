@@ -10,4 +10,12 @@ class Campaign extends Model
 {
     /** @use HasFactory<CampaignFactory> */
     use HasFactory;
+
+    protected $fillable = [
+        'name',
+        'status',
+        'start_date',
+        'end_date',
+        'daily_budget',
+    ];
 }
