@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('campaigns', function (Blueprint $table) {
+        Schema::create('campaign', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->enum('status', ['active', 'paused', 'completed'])->default('paused');
