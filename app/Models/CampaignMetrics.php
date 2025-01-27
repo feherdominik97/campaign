@@ -10,4 +10,17 @@ class CampaignMetrics extends Model
 {
     /** @use HasFactory<CampaignMetricsFactory> */
     use HasFactory;
+
+    protected $fillable = [
+        'date',
+        'impressions',
+        'clicks',
+        'spend',
+        'conversions',
+    ];
+
+    public function campaign()
+    {
+        return $this->belongsTo(Campaign::class);
+    }
 }

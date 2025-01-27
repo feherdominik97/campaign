@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Campaign;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -19,6 +20,8 @@ return new class extends Migration
             $table->float('spend');
             $table->float('conversions');
             $table->timestamps();
+
+            $table->foreign('campaign_id')->references('id')->on('campaigns');
         });
     }
 
