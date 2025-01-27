@@ -4,11 +4,11 @@ namespace Tests\Feature;
 
 use App\Models\Campaign;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class CampaignApiTest extends TestCase
 {
+    use RefreshDatabase;
     public function test_store_campaign()
     {
         $data = [
@@ -100,5 +100,74 @@ class CampaignApiTest extends TestCase
 
         $response->assertStatus(422)
             ->assertJsonValidationErrors(['name']);
+    }
+
+    public function it_returns_metrics_for_a_specific_campaign_within_a_date_range(): void
+    {
+        $campaign = Campaign::factory()->create([
+            'name' => 'Test Campaign',
+        ]);
+
+        $metricsData = [
+            ['date' => '2025-01-01', 'impressions' => 100, 'clicks' => 10, 'spend' => 50.0, 'conversions' => 5],
+            ['date' => '2025-01-02', 'impressions' => 150, 'clicks' => 15, 'spend' => 75.0, 'conversions' => 8],
+            ['date' => '2025-01-03', 'impressions' => 200, 'clicks' => 20, 'spend' => 100.0, 'conversions' => 12],
+        ];
+
+        foreach ($metricsData as $data) {
+            $campaign->metrics()->create($data);
+        }
+
+        $startDate = '2025-01-01';
+        $endDate = '2025-01-02';
+
+        $response = $this->getJson(route('campaign.metrics', ['campaign' => $campaign->id, 'start' => $startDate, 'end' => $endDate]));
+
+        // Assert that the response is successful
+        $response->assertStatus(200);
+
+        // Assert that the response contains the campaign details and metrics
+        $response->assertJsonFragment([
+            'campaign_id' => $campaign->id,
+            'campaign_name' => $campaign->name,
+        ]);
+
+        // Assert that only the metrics for the given date range are returned
+        $response->assertJsonCount(2, 'metrics'); // 2 metrics should be returned for the 2025-01-01 and 2025-01-02 dates
+    }
+
+    public function it_returns_no_metrics_if_no_data_exists_for_the_given_date_range(): void
+    {
+        $campaign = Campaign::factory()->create([
+            'name' => 'Test Campaign',
+        ]);
+
+        $startDate = '2025-02-01';
+        $endDate = '2025-02-28';
+
+        $response = $this->getJson(route('campaign.metrics', ['campaign' => $campaign->id, 'start' => $startDate, 'end' => $endDate]));
+
+        // Assert that the response is successful
+        $response->assertStatus(200);
+
+        // Assert that the metrics array is empty
+        $response->assertJson([
+            'campaign_id' => $campaign->id,
+            'campaign_name' => $campaign->name,
+            'metrics' => [],
+        ]);
+    }
+
+    public function it_validates_the_request_data(): void
+    {
+        $campaign = Campaign::factory()->create();
+
+        $response = $this->getJson(route('campaign.metrics', ['campaign' => $campaign->id]));
+
+        // Assert that the response status is 422 (Unprocessable Entity)
+        $response->assertStatus(422);
+
+        // Assert that the response contains validation errors
+        $response->assertJsonValidationErrors(['start', 'end']);
     }
 }
