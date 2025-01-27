@@ -37,6 +37,6 @@ class Campaign extends Model
 
     public function metrics(): HasMany
     {
-        return $this->hasMany(CampaignMetric::class);
+        return $this->hasMany(CampaignMetrics::class);
     }
 }

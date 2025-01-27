@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Campaign;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -22,6 +23,7 @@ class CampaignMetricsFactory extends Factory
             'clicks' => $this->faker->numberBetween(0, 100000),
             'spend' => $this->faker->randomFloat(2, 0, 10000),
             'conversions' => $this->faker->randomFloat(2, 0, 5000),
+            'campaign_id' => Campaign::factory()
         ];
     }
 }
