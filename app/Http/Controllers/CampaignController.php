@@ -24,7 +24,7 @@ class CampaignController extends Controller
     {
         $campaign = Campaign::query()->create($request->validated());
 
-        return response()->($campaign, Response::HTTP_CREATED);
+        return response()->json($campaign, Response::HTTP_CREATED);
     }
 
     /**
