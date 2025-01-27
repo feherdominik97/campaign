@@ -1,0 +1,485 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Campaign API",
+        "description": "API documentation for managing campaigns and their metrics.",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost/api",
+            "description": "Local Development Server"
+        }
+    ],
+    "paths": {
+        "/campaigns": {
+            "get": {
+                "tags": [
+                    "Campaign"
+                ],
+                "summary": "Get all campaigns",
+                "description": "Display a listing of the campaigns.",
+                "operationId": "d2a1aecdf4c5fee4d3d5f820b5b2a250",
+                "responses": {
+                    "200": {
+                        "description": "A list of campaigns",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Campaign"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Campaign"
+                ],
+                "summary": "Create a new campaign",
+                "description": "Store a newly created campaign.",
+                "operationId": "a0bb4df932d4174de20c996bfa6f3783",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CampaignRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Campaign created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Campaign"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/campaigns/{id}": {
+            "get": {
+                "tags": [
+                    "Campaign"
+                ],
+                "summary": "Get a specific campaign",
+                "description": "Display a specific campaign.",
+                "operationId": "2932baff0a96253f970c1d3696fa5034",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the campaign",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Campaign details",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Campaign"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Campaign not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Campaign"
+                ],
+                "summary": "Update a specific campaign",
+                "description": "Update a specific campaign.",
+                "operationId": "0d9fdd982821a4e54848c1e4ca7e2918",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the campaign to update",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CampaignRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Campaign updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Campaign"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Campaign"
+                ],
+                "summary": "Delete a specific campaign",
+                "description": "Remove a specific campaign.",
+                "operationId": "48be2f3c96f59a0c784245bac7ea50dd",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the campaign to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Campaign deleted successfully"
+                    }
+                }
+            }
+        },
+        "/campaigns/{id}/metrics": {
+            "get": {
+                "tags": [
+                    "Campaign"
+                ],
+                "summary": "Get metrics for a campaign",
+                "description": "Retrieve metrics for a specific campaign.",
+                "operationId": "7a63b7c768c2c181fcd4366a0337694e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the campaign",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "start",
+                        "in": "query",
+                        "description": "Start date for filtering metrics",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "end",
+                        "in": "query",
+                        "description": "End date for filtering metrics",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Metrics retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/CampaignMetrics"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/campaign-metrics": {
+            "post": {
+                "tags": [
+                    "Campaign Metrics"
+                ],
+                "summary": "Create a new campaign metric",
+                "description": "Store a newly created campaign metric in the database",
+                "operationId": "storeCampaignMetric",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CampaignMetricsRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Campaign metric created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CampaignMetrics"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation errors",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
+                                        "errors": {
+                                            "type": "object",
+                                            "example": {
+                                                "date": [
+                                                    "The date field is required."
+                                                ],
+                                                "impressions": [
+                                                    "The impressions field is required."
+                                                ],
+                                                "clicks": [
+                                                    "The clicks field is required."
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "CampaignMetricsRequest": {
+                "required": [
+                    "date",
+                    "impressions",
+                    "clicks",
+                    "spend",
+                    "conversions"
+                ],
+                "properties": {
+                    "date": {
+                        "description": "Date of the metrics",
+                        "type": "string",
+                        "format": "date",
+                        "example": "2025-01-01"
+                    },
+                    "impressions": {
+                        "description": "Number of impressions",
+                        "type": "integer",
+                        "example": 1000
+                    },
+                    "clicks": {
+                        "description": "Number of clicks",
+                        "type": "integer",
+                        "example": 50
+                    },
+                    "spend": {
+                        "description": "Spend on the campaign",
+                        "type": "number",
+                        "format": "float",
+                        "example": 200.5
+                    },
+                    "conversions": {
+                        "description": "Number of conversions",
+                        "type": "number",
+                        "format": "float",
+                        "example": 10
+                    }
+                },
+                "type": "object"
+            },
+            "CampaignRequest": {
+                "required": [
+                    "name",
+                    "start_date",
+                    "end_date",
+                    "daily_budget"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "Name of the campaign",
+                        "type": "string",
+                        "example": "New Year Sale"
+                    },
+                    "start_date": {
+                        "description": "Start date of the campaign",
+                        "type": "string",
+                        "format": "date",
+                        "example": "2025-01-01"
+                    },
+                    "end_date": {
+                        "description": "End date of the campaign",
+                        "type": "string",
+                        "format": "date",
+                        "example": "2025-01-31"
+                    },
+                    "daily_budget": {
+                        "description": "Daily budget for the campaign",
+                        "type": "number",
+                        "format": "float",
+                        "example": 150.75
+                    }
+                },
+                "type": "object"
+            },
+            "Campaign": {
+                "required": [
+                    "name",
+                    "status",
+                    "start_date",
+                    "end_date",
+                    "daily_budget"
+                ],
+                "properties": {
+                    "id": {
+                        "description": "Campaign ID",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "description": "Name of the campaign",
+                        "type": "string",
+                        "example": "Holiday Sales Campaign"
+                    },
+                    "status": {
+                        "description": "Status of the campaign (active/inactive)",
+                        "type": "string",
+                        "example": "active"
+                    },
+                    "start_date": {
+                        "description": "Start date of the campaign",
+                        "type": "string",
+                        "format": "date",
+                        "example": "2025-01-01"
+                    },
+                    "end_date": {
+                        "description": "End date of the campaign",
+                        "type": "string",
+                        "format": "date",
+                        "example": "2025-01-10"
+                    },
+                    "daily_budget": {
+                        "description": "Daily budget for the campaign",
+                        "type": "number",
+                        "format": "float",
+                        "example": 100.5
+                    },
+                    "created_at": {
+                        "description": "Creation timestamp",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-01-01T12:00:00Z"
+                    },
+                    "updated_at": {
+                        "description": "Last updated timestamp",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-01-02T12:00:00Z"
+                    }
+                },
+                "type": "object"
+            },
+            "CampaignMetrics": {
+                "required": [
+                    "date",
+                    "impressions",
+                    "clicks",
+                    "spend",
+                    "conversions"
+                ],
+                "properties": {
+                    "id": {
+                        "description": "Metric ID",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "date": {
+                        "description": "Date of the metric",
+                        "type": "string",
+                        "format": "date",
+                        "example": "2025-01-01"
+                    },
+                    "impressions": {
+                        "description": "Number of impressions",
+                        "type": "integer",
+                        "example": 1000
+                    },
+                    "clicks": {
+                        "description": "Number of clicks",
+                        "type": "integer",
+                        "example": 150
+                    },
+                    "spend": {
+                        "description": "Amount spent",
+                        "type": "number",
+                        "format": "float",
+                        "example": 75.5
+                    },
+                    "conversions": {
+                        "description": "Number of conversions",
+                        "type": "number",
+                        "format": "float",
+                        "example": 10
+                    },
+                    "campaign_id": {
+                        "description": "ID of the associated campaign",
+                        "type": "integer",
+                        "example": 1
+                    }
+                },
+                "type": "object"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Campaign",
+            "description": "Operations related to campaigns"
+        },
+        {
+            "name": "Campaign Metrics",
+            "description": "Campaign Metrics"
+        }
+    ]
+}
