@@ -20,7 +20,7 @@ class CampaignController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(CampaignRequest $request)
+    public function store(CampaignRequest $request): JsonResponse
     {
         $campaign = Campaign::query()->create($request->validated());
 
