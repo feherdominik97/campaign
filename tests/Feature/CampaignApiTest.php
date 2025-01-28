@@ -3,7 +3,9 @@
 namespace Tests\Feature;
 
 use App\Models\Campaign;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class CampaignApiTest extends TestCase
@@ -11,6 +13,9 @@ class CampaignApiTest extends TestCase
     use RefreshDatabase;
     public function test_store_campaign()
     {
+        $user = User::factory()->create();
+        Sanctum::actingAs($user);
+
         $data = [
             'name' => 'Summer Campaign',
             'start_date' => '2025-06-01',
@@ -18,7 +23,7 @@ class CampaignApiTest extends TestCase
             'daily_budget' => 20000.00,
         ];
 
-        $response = $this->json('POST', '/api/campaigns', $data);
+        $response = $this->postJson('/api/campaigns', $data);
 
         $response->assertStatus(201)
             ->assertJsonFragment(['name' => 'Summer Campaign']);
@@ -48,6 +53,9 @@ class CampaignApiTest extends TestCase
 
     public function test_update_campaign()
     {
+        $user = User::factory()->create();
+        Sanctum::actingAs($user);
+
         $campaign = Campaign::factory()->create();
 
         $updatedData = [
@@ -57,7 +65,7 @@ class CampaignApiTest extends TestCase
             'daily_budget' => 30000.00,
         ];
 
-        $response = $this->json('PUT', "/api/campaigns/{$campaign->id}", $updatedData);
+        $response = $this->putJson("/api/campaigns/{$campaign->id}", $updatedData);
 
         $response->assertStatus(200);
 
@@ -70,9 +78,12 @@ class CampaignApiTest extends TestCase
 
     public function test_destroy_campaign()
     {
+        $user = User::factory()->create();
+        Sanctum::actingAs($user);
+
         $campaign = Campaign::factory()->create();
 
-        $response = $this->json('DELETE', "/api/campaigns/{$campaign->id}");
+        $response = $this->deleteJson("/api/campaigns/{$campaign->id}");
 
         $response->assertStatus(200);
 
@@ -83,20 +94,23 @@ class CampaignApiTest extends TestCase
 
     public function test_show_campaign_not_found()
     {
-        $response = $this->json('GET', '/api/campaigns/999');
+        $response = $this->getJson('/api/campaigns/999');
 
         $response->assertStatus(404);
     }
 
     public function test_store_campaign_validation_error()
     {
+        $user = User::factory()->create();
+        Sanctum::actingAs($user);
+
         $data = [
             'start_date' => '2025-06-01',
             'end_date' => '2025-07-01',
             'daily_budget' => 20000.00,
         ];
 
-        $response = $this->json('POST', '/api/campaigns', $data);
+        $response = $this->postJson('/api/campaigns', $data);
 
         $response->assertStatus(422)
             ->assertJsonValidationErrors(['name']);
