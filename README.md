@@ -61,3 +61,4 @@ php artisan test --env=testing
 ```
 
 The application should now be accessible at `http://localhost:8000`.
+Documentation: `http://localhost:8000/api/documentation`.
