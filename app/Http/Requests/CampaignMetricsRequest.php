@@ -40,6 +40,7 @@ class CampaignMetricsRequest extends FormRequest
             'clicks' => 'required|integer|min:0',
             'spend' => 'required|numeric|min:0',
             'conversions' => 'required|numeric|min:0',
+            'campaign_id' => 'required|numeric|min:1',
         ];
 
         if ($this->is('api/campaign-metrics/analytics/*')) {

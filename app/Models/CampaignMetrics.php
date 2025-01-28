@@ -31,6 +31,7 @@ class CampaignMetrics extends Model
         'clicks',
         'spend',
         'conversions',
+        'campaign_id'
     ];
 
     public function campaign()

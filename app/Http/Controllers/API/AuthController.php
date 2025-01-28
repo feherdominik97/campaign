@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Models\User;
@@ -16,7 +17,7 @@ class AuthController extends Controller
     /**
      * Handle user registration.
      *
-     * @param Request $request
+     * @param RegisterRequest $request
      * @return JsonResponse
      */
     public function register(RegisterRequest $request): JsonResponse

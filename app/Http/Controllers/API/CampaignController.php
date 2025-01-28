@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
+use App\Helpers\DateRangeHelper;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\CampaignRequest;
 use App\Http\Requests\DateRangeRequest;
 use App\Models\Campaign;
-use App\Helpers\DateRangeHelper;
 use Illuminate\Http\JsonResponse;
 use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response;

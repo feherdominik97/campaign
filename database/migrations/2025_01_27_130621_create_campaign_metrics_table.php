@@ -19,10 +19,8 @@ return new class extends Migration
             $table->integer('clicks');
             $table->float('spend');
             $table->float('conversions');
-            $table->unsignedBigInteger('campaign_id');
+            $table->foreignId('campaign_id')->references('id')->on('campaigns')->onDelete('cascade');
             $table->timestamps();
-
-            $table->foreign('campaign_id')->references('id')->on('campaigns');
         });
     }
 
