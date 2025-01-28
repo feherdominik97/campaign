@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CampaignRequest;
+use App\Http\Requests\DateRangeRequest;
 use App\Models\Campaign;
+use App\Helpers\DateRangeHelper;
 use Illuminate\Http\JsonResponse;
 use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response;
@@ -176,14 +178,14 @@ class CampaignController extends Controller
      *         @OA\Schema(type="integer")
      *     ),
      *     @OA\Parameter(
-     *         name="start",
+     *         name="start_date",
      *         in="query",
      *         required=true,
      *         description="Start date for filtering metrics",
      *         @OA\Schema(type="string", format="date")
      *     ),
      *     @OA\Parameter(
-     *         name="end",
+     *         name="end_date",
      *         in="query",
      *         required=true,
      *         description="End date for filtering metrics",
@@ -196,16 +198,15 @@ class CampaignController extends Controller
      *     )
      * )
      */
-    public function metrics(CampaignRequest $request, $campaignId): JsonResponse
+    public function metrics(DateRangeRequest $request, $id): JsonResponse
     {
-        $validated = $request->validated();
+        $start = $request->input('start_date', false);
+        $end = $request->input('end_date', false);
 
-        $campaign = Campaign::query()->findOrFail($campaignId);
-        $campaign = new Campaign($campaign);
-
-        $metrics = $campaign->metrics()
-            ->whereBetween('date', [$validated['start'], $validated['end']])
-            ->get();
+        $campaign = Campaign::query()->findOrFail($id);
+        $metrics = $campaign->metrics();
+        $metrics = DateRangeHelper::appendRangeFilter($metrics, $start, $end);
+        $metrics = $metrics->get();
 
         return response()->json([
             'campaign_id' => $campaign->id,

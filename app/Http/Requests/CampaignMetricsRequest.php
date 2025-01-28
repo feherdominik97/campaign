@@ -42,9 +42,9 @@ class CampaignMetricsRequest extends FormRequest
             'conversions' => 'required|numeric|min:0',
         ];
 
-        if ($this->is('api/campaigns/*/metrics')) {
-            $rules['start'] = 'required|date';
-            $rules['end'] = 'required|date|after_or_equal:start';
+        if ($this->is('api/campaign-metrics/analytics/*')) {
+            $rules['start_date'] = 'date';
+            $rules['end_date'] = 'date|after_or_equal:start';
         }
 
         return $rules;

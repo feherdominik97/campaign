@@ -187,7 +187,7 @@
                         }
                     },
                     {
-                        "name": "start",
+                        "name": "start_date",
                         "in": "query",
                         "description": "Start date for filtering metrics",
                         "required": true,
@@ -197,7 +197,7 @@
                         }
                     },
                     {
-                        "name": "end",
+                        "name": "end_date",
                         "in": "query",
                         "description": "End date for filtering metrics",
                         "required": true,
@@ -285,6 +285,57 @@
                     }
                 }
             }
+        },
+        "/api/campaign-metrics/all": {
+            "post": {
+                "tags": [
+                    "Campaign Metrics"
+                ],
+                "summary": "Retrieve all campaign metrics within a date range",
+                "description": "Retrieve all metrics for campaigns, optionally filtered by a start and end date.",
+                "operationId": "getAllCampaignMetrics",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/DateRangeRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "All campaign metrics retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/CampaignMetrics"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid date range",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Invalid date range provided."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -359,6 +410,27 @@
                         "type": "number",
                         "format": "float",
                         "example": 150.75
+                    }
+                },
+                "type": "object"
+            },
+            "DateRangeRequest": {
+                "required": [
+                    "start_date",
+                    "end_date"
+                ],
+                "properties": {
+                    "start_date": {
+                        "description": "The start date for the date range",
+                        "type": "string",
+                        "format": "date",
+                        "example": "2025-01-01"
+                    },
+                    "end_date": {
+                        "description": "The end date for the date range. Must be equal to or after the start_date.",
+                        "type": "string",
+                        "format": "date",
+                        "example": "2025-01-31"
                     }
                 },
                 "type": "object"
@@ -479,7 +551,7 @@
         },
         {
             "name": "Campaign Metrics",
-            "description": "Campaign Metrics"
+            "description": "Operations related to campaign metrics"
         }
     ]
 }
