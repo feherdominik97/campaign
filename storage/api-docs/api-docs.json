@@ -19,7 +19,7 @@
                 ],
                 "summary": "Get all campaigns",
                 "description": "Display a listing of the campaigns.",
-                "operationId": "d2a1aecdf4c5fee4d3d5f820b5b2a250",
+                "operationId": "bc8b91dbfc90309adff89862f8a062f5",
                 "responses": {
                     "200": {
                         "description": "A list of campaigns",
@@ -42,7 +42,7 @@
                 ],
                 "summary": "Create a new campaign",
                 "description": "Store a newly created campaign.",
-                "operationId": "a0bb4df932d4174de20c996bfa6f3783",
+                "operationId": "894e41816b39c673028806bbad1d38b6",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -74,7 +74,7 @@
                 ],
                 "summary": "Get a specific campaign",
                 "description": "Display a specific campaign.",
-                "operationId": "2932baff0a96253f970c1d3696fa5034",
+                "operationId": "acbe8921628eddf6e639ab0f10fafc79",
                 "parameters": [
                     {
                         "name": "id",
@@ -108,7 +108,7 @@
                 ],
                 "summary": "Update a specific campaign",
                 "description": "Update a specific campaign.",
-                "operationId": "0d9fdd982821a4e54848c1e4ca7e2918",
+                "operationId": "1ff31803c13057ecd9062129dadb810a",
                 "parameters": [
                     {
                         "name": "id",
@@ -149,7 +149,7 @@
                 ],
                 "summary": "Delete a specific campaign",
                 "description": "Remove a specific campaign.",
-                "operationId": "48be2f3c96f59a0c784245bac7ea50dd",
+                "operationId": "f175262e84dc62da7671bb70a39c220c",
                 "parameters": [
                     {
                         "name": "id",
@@ -175,7 +175,7 @@
                 ],
                 "summary": "Get metrics for a campaign",
                 "description": "Retrieve metrics for a specific campaign.",
-                "operationId": "7a63b7c768c2c181fcd4366a0337694e",
+                "operationId": "17d5d91c5094dba60e66e51db6b96a99",
                 "parameters": [
                     {
                         "name": "id",
