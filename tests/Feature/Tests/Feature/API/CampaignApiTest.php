@@ -1,20 +1,29 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\API;
 
 use App\Models\Campaign;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class CampaignApiTest extends TestCase
 {
     use RefreshDatabase;
+
+    protected User|Collection|Model $user;
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->user = User::factory()->create();
+        $this->actingAs($this->user, 'sanctum');
+    }
+
     public function test_store_campaign()
     {
-        $user = User::factory()->create();
-        Sanctum::actingAs($user);
 
         $data = [
             'name' => 'Summer Campaign',
@@ -53,9 +62,6 @@ class CampaignApiTest extends TestCase
 
     public function test_update_campaign()
     {
-        $user = User::factory()->create();
-        Sanctum::actingAs($user);
-
         $campaign = Campaign::factory()->create();
 
         $updatedData = [
@@ -78,9 +84,6 @@ class CampaignApiTest extends TestCase
 
     public function test_destroy_campaign()
     {
-        $user = User::factory()->create();
-        Sanctum::actingAs($user);
-
         $campaign = Campaign::factory()->create();
 
         $response = $this->deleteJson("/api/campaigns/{$campaign->id}");
@@ -101,9 +104,6 @@ class CampaignApiTest extends TestCase
 
     public function test_store_campaign_validation_error()
     {
-        $user = User::factory()->create();
-        Sanctum::actingAs($user);
-
         $data = [
             'start_date' => '2025-06-01',
             'end_date' => '2025-07-01',
