@@ -16,8 +16,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     });
 
     Route::prefix('campaigns')->group(function () {
-        Route::apiResource('', CampaignController::class)->parameter('', 'id');
-        Route::get('{id}/metrics', [CampaignController::class, 'metrics'])
+        Route::apiResource('', CampaignController::class)->parameter('', 'campaign');
+        Route::get('{campaign}/metrics', [CampaignController::class, 'metrics'])
             ->name('campaign.metrics');
     });
 

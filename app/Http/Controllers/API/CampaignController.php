@@ -97,10 +97,8 @@ class CampaignController extends Controller
      *     )
      * )
      */
-    public function show($id): JsonResponse
+    public function show(Campaign $campaign): JsonResponse
     {
-        $campaign = Campaign::query()->findOrFail($id);
-
         return response()->json($campaign, Response::HTTP_OK);
     }
 
@@ -129,11 +127,9 @@ class CampaignController extends Controller
      *     )
      * )
      */
-    public function update(CampaignRequest $request, $id): JsonResponse
+    public function update(CampaignRequest $request, Campaign $campaign): JsonResponse
     {
-        $campaign = Campaign::query()->findOrFail($id);
-        $campaign = array_merge($campaign->toArray(), $request->validated());
-        Campaign::query()->where('id', $id)->update($campaign);
+        $campaign->update($request->validated());
 
         return response()->json($campaign, Response::HTTP_OK);
     }
@@ -158,10 +154,9 @@ class CampaignController extends Controller
      *     )
      * )
      */
-    public function destroy($id): JsonResponse
+    public function destroy(Campaign $campaign): JsonResponse
     {
-        $deleted = Campaign::destroy($id);
-        return response()->json($deleted, Response::HTTP_OK);
+        return response()->json($campaign->delete(), Response::HTTP_OK);
     }
 
     /**
@@ -199,12 +194,10 @@ class CampaignController extends Controller
      *     )
      * )
      */
-    public function metrics(DateRangeRequest $request, $id): JsonResponse
+    public function metrics(DateRangeRequest $request, Campaign $campaign): JsonResponse
     {
         $start = $request->input('start_date', false);
         $end = $request->input('end_date', false);
-
-        $campaign = Campaign::query()->findOrFail($id);
         $metrics = $campaign->metrics();
         $metrics = DateRangeHelper::appendRangeFilter($metrics, $start, $end);
         $metrics = $metrics->get();
